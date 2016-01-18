@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #map { height: 100%; }
+    </style>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <div id="infoSupplier" class="hidden">
+    </div>
+    <form action="#" onSubmit="addPinOnSearch(event, this.address.value); return false"><p>
+      <input type="text" style="width:350px" name="address" placeholder="Enter an address" />
+      <input type="submit" value="Search" />
+    </p></form>
+    <button onClick=hideInfo()>Hide Information Window</button>
+    <div id="map" style="height:70%"><r/div>
+    <script type="text/javascript">
+
+      // initialize variables
+      var map;
+      var geocoder;
+      var center;
+      var favorites = [];
+      var counter = 0;
+
+      var hideInfo = function () {
+        var infoSupplier = document.getElementById('infoSupplier');
+        infoSupplier.setAttribute('class', 'hidden');
+      };
+
+      // called when the page loads
+      var initMap = function () {
+        center = {lat: 37.7836966, lng: -122.4089664};
+        geocoder = new google.maps.Geocoder();
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: center,
+          zoom: 12
+        });
+
+        // Attaching right click to inserting a pin
+        // google.maps.event.addListener(map, "rightclick", function(event) {
+        //   var lat = event.latLng.lat();
+        //   var lng = event.latLng.lng();
+        //   var myLatLng = {lat: lat, lng: lng};
+        //   var marker = new google.maps.Marker({
+        //     map: map,
+        //     position: myLatLng
+        //   });
+
+        //   var infoWindow = new google.maps.InfoWindow({
+        //     content: 'Info Window content here ' + counter++
+        //   });
+
+        //   infoWindow.open(map, marker);
+
+        //   // Opens the InfoWindow when marker is clicked.
+        //   marker.addListener('click', function() {
+        //     infoWindow.open(map, marker);
+        //   });
+
+        //   favorites.push({marker: marker, infoWindow: infoWindow});
+        // });
+      };
+
+      var geoResponse = function (results, status) {
+        var contentString = '<div id="content">'+
+          '<div id="siteNotice">'+
+          '</div>'+
+          '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+          '<div id="bodyContent">'+
+          '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+          'sandstone rock formation in the southern part of the '+
+          'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+          'south west of the nearest large town, Alice Springs; 450&#160;km '+
+          '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+          'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+          'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+          'Aboriginal people of the area. It has many springs, waterholes, '+
+          'rock caves and ancient paintings. Uluru is listed as a World '+
+          'Heritage Site.</p>'+
+          '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+          'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+          '(last visited June 22, 2009).</p>'+
+          '</div>'+
+          '</div>';
+
+        if (status == google.maps.GeocoderStatus.OK) {
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+              map: map,
+              position: results[0].geometry.location
+          });
+
+          // Construct a new InfoWindow.
+          var infoWindow = new google.maps.InfoWindow({
+            content: 'Info Window content here ' + counter++
+          });
+          // Make sure the info window is blank upon creation
+          infoWindow.open(map, marker);
+
+          // Opens the InfoWindow when marker is clicked.
+          marker.addListener('click', function() {
+            // close all windows
+            favorites.forEach(function(favorite) {
+              favorite.infoWindow.close();
+            });
+
+            infoWindow.open(map, marker);
+            var infoSupplier = document.getElementById('infoSupplier');
+            infoSupplier.textContent = infoWindow.content;
+            infoSupplier.setAttribute('class', 'shown');
+          });
+          
+          favorites.push({marker: marker, infoWindow: infoWindow});
+        } else {
+          alert("Geocode was not successful for the following reason: " + status);
+        }
+      };
+
+      var addPinOnSearch = function (event, inputAddress) {
+        console.log('got here');
+        event.preventDefault();
+
+        geocoder.geocode({address: inputAddress}, geoResponse);
+      };
+
+
+
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5BzCoE3u0WTVkFhDPEPdBLZAhm0SnWik&callback=initMap">
+    </script>
+  </body>
+</html>

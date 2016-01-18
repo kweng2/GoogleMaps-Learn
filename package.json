@@ -1,0 +1,16 @@
+{
+  "name": "google-maps",
+  "version": "1.0.0",
+  "description": "Learning tutorial for using the google maps API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Kevin Weng",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3"
+  }
+}

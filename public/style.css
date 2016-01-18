@@ -1,0 +1,15 @@
+#infoSupplier {
+  background-color: green;
+  width: 90%;
+  height: 50px;
+  position: fixed;
+  top: 80%;
+}
+
+.shown {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
