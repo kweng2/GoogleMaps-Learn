@@ -1,6 +1,6 @@
 ## Learning the Google Maps API
 
-Pretty cool so far!
+Google Maps API's tutorial
 
 ### Getting Started
 
